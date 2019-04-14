@@ -1,0 +1,54 @@
+SSL　	アプセ
+IPsec	アプセトネ
+
+｜IPsecとは	※規格である
+｜暗号化…共通鍵、公開鍵両方
+｜認証…ハッシュ関数
+｜手順…鍵交換にIKEを利用する		
+｜プロトコル…ESP,AH(暗号化しない,認証のみ)
+ ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+
+接続形態
+　ホストtoホスト　 □======□
+　ホストtoサイト   □======〇-|
+　サイトtoサイト |-〇======〇-|		〇 router   □client　=auth
+
+サイトtoサイト
+・暗号化の必要性は？→		ESPorAH
+・IPヘッダの置き換えは？→	トランスポートモード or トンネルモード (ESP、AHのモード)
+・鍵交換(IKE)のバージョンは？→	IKEv1 or IKEv2
+・暗号化アルゴリズムは？→	AES256 or AES128 ...
+・認証アルゴリズムは？→	SHA1 or SHA2
+
+IKE
+フェーズ1:安全に鍵交換をする準備→ISAKMP SA	※設定ファイルを残す
+フェーズ2:鍵交換を行う→IPsecSA
+
+①ISAKMP SAに関する設定
+RTA(config)#crypto isakmp policy 番号				#基本的に10ずつ、優先度がつくため
+RTA(config-isakmp)#encryption aes 256				#暗号化アルゴリズムの設定
+RTA(config-isakmp)#authentication pre-share			#認証方式
+RTA(config-isakmp)#hash sha512					#ハッシュ、改ざん検知の設定
+RTA(config-isakmp)#group 24					#Diffie-Hellmanの鍵の受け渡しアルゴリズム
+RTA(config)#crypto isakmp key key文字列 address 相手のアドレス	#pre-shareによるキーの設定
+
+②IPsec SAに関する設定
+RTA(config)#crypto ipsec transform-set IPSECC esp-aes 256 esp-sha512-hmac	#①のプロトコル、暗号方式、ハッシュ方式
+RTA(cfg-crypto-trans)#mode tunnel
+
+③対象トラフィックの指定
+RTA(config)#access-list 100 permit ip any any
+
+④各種設定のマッピング
+RTA(config)#crypto map  mapn 10 ipsec-isakmp
+RTA(config-crypto-map)#set peer 200.0.0.1
+RTA(config-crypto-map)#set transform-set IPSECC
+RTA(config-crypto-map)#match address ACLの値
+
+⑤インターフェースの設定
+RTA(config-if)#crypto map mapn		#grobal側
+
+⑥確認方法
+# show crypto isakmp sa
+# show crypto ipsec sa
+# debug crypto engine packet

@@ -1,0 +1,29 @@
+<pap>
+#RTA
+encapsulation ppp
+ppp authentication pap
+
+config)username RTB password cisco
+
+#RTB
+encapsulation ppp
+ppp username RTB password cisco
+
+<chap>
+#RTA
+encapsulation ppp
+ppp authentication chap
+
+config)username RTB password cisco		¦‚±‚±‚Å‚ÌPW‚Í“ˆê‚µ‚È‚¢‚Æ‚¤‚Ü‚­’ÊM‚Å‚«‚È‚¢
+
+#RTB
+encapsulation ppp
+ppp authentication chap
+
+config)username RTA password cisco
+
+<MLPPP> ƒŠƒ“ƒN‚ğ‘©‚Ë‚é
+(config)# interface multilink bundle-number
+(config-if)# ip address ipaddress subnetmask	
+(config-if)# ppp multilink			¦—LŒø‰»
+(config-if)# ppp multilink group group-number

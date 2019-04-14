@@ -1,0 +1,19 @@
+PBR(ポリシーベースルーティング)
+　ルーティングプロトコルの情報を改変する仕組み
+　ポリシーにのっとったルーティングを実現する
+
+　①ACLで対象を指定する
+　　#) access-list 100 permit ip any any
+    #) access-list 1 permit 192.168.0.0 0.0.0.255
+			    ￣￣￣￣￣￣￣￣￣￣￣PBRの対象ルート情報（改変したい情報）
+　②ルートマップを作る
+　　config)# route-map マップ名　(permit,deny) シーケンス番号		※accesslistと同じ仕組みで暗黙のdenyがある
+　　  -map)# match ip address ACL番号
+　　  -map)# set origin igp
+　
+　③再配送にルートマップを適用
+　　-router)# redistribute static route-map マップ名
+
+　フルメッシュIBGPの追加
+　　 config)# router bgp xx
+　　-router)# neighbor x.x.x.x next-hop-self

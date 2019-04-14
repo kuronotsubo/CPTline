@@ -1,0 +1,14 @@
+#L2パケットを通すトンネリング(OSPFマルチキャストなど
+
+RTA(config)#interface tunnel 0
+RTA(config-if)#ip add 10.0.0.1 255.255.255.252
+RTA(config-if)#tunnel source s0/0/0
+RTA(config-if)#tunnel destination 192.168.1.102
+RTA(config-router)#network 10.0.0.0 0.0.0.3 area 0
+
+
+RTC(config)#interface tunnel 0
+RTC(config-if)#ip add 10.0.0.2 255.255.255.252
+RTC(config-if)#tunnel source s0/0/0
+RTC(config-if)#tunnel destination 192.168.1.98
+RTC(config-router)#network 10.0.0.0 0.0.0.3 area 0

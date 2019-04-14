@@ -1,0 +1,71 @@
+BGP
+AS（自立システム)間をルーティングする	※組織間
+
+・BGPはアプリケーションプロトコルとして動作する
+・BHPはTCPを利用する（ポート番号　179番)
+ルータが3台あれば両端のみ設定。
+・メトリック→パスアトリビュート
+・AS単位でルーティングを計算する
+（ルーティングテーブルはサブネット単位）
+
+・BGPが動作するルータ→BGPスピーカー
+・他ASのBGPスピーカー→eBGPスピーカー（エクステリア,IGPやEGPのEと一緒)
+・自ASのBGPスピーカー→iBGPスピーカー
+
+「ASの種類」
+・グローバル/プライベートASの違い
+AS番号　16bit = 65536通り = 0～65535
+	グローバル　 1～64511
+	プライベート 64512～65535
+
+・用途の違い（種類）
+　①スタブAS
+	他ASとの接続が1つ、かつ他AS間のルーティングを行わない
+　②マルチホームAS
+	他ASとの接続が複数、かつ他AS間のルーティングを行わない
+　③トランジットAS
+	他ASとの接続が複数、かつ他AS間のルーティングを行う
+
+「BGPの設定」
+ config)# router bgp AS番号
+-router)# neigber eBGPのアドレス remote-as AS番号
+-router)# network ネットワークアドレス mask サブネットマスク
+-router)# no auto-summary
+
+「BGPの確認」
+# show ip bgp
+# show ip bgp summary
+# show ip bgp neigber
+
+「経路の再配送」
+ config)# router bgp AS番号
+-router)# redistribute ospf プロセス番号
+
+パスアトリビュート
+　10種類 +1 （CISCO独自）
+　①Wellknown Mandatory(必須)
+	1.Origin	…　ルート生成元
+	2.AS_PATH	…　経由するASの数（ホップ数）
+	3.NEXT_HOP	…　ネクストホップの到達性
+　　三つの複合でベストパスを決定
+		￣￣￣￣￣（ASパス）
+
+PBR(ポリシーベースルーティング)
+　ルーティングプロトコルの情報を改変する仕組み
+　ポリシーにのっとったルーティングを実現する
+
+　①ACLで対象を指定する
+　　#) access-list 100 permit ip any any
+    #) access-list 1 permit 192.168.0.0 0.0.0.255
+			    ￣￣￣￣￣￣￣￣￣￣￣PBRの対象ルート情報（改変したい情報）
+　②ルートマップを作る
+　　config)# route-map マップ名　(permit,deny) シーケンス番号		※accesslistと同じ仕組みで暗黙のdenyがある
+　　  -map)# match ip address ACL番号
+　　  -map)# set origin igp
+　
+　③再配送にルートマップを適用
+　　-router)# redistribute static route-map マップ名
+
+　フルメッシュIBGPの追加
+　　 config)# router bgp xx
+　　-router)# neighbor x.x.x.x next-hop-self
