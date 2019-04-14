@@ -1,0 +1,15 @@
+①DHCPサービスの有効化
+(config)# service dhcp 
+②除外するIPアドレスの設定
+(config)# ip dhcp excluded-address 192.168.0.250 192.168.0.254
+③DHCPプール名の設定
+(config)# ip dhcp pool pool-name
+④ネットワークアドレスの設定
+(dhcp-config)# network 192.168.0.0 255.255.255.0
+⑤GWの設定
+(dhcp-config)# default-router 192.168.0.254
+⑥DNS
+(dhcp-config)# dns-server ip-address
+
+(dhcp-config)# domain-name name
+(dhcp-config)# lease days hours minutes | infinite
