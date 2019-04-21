@@ -1,0 +1,30 @@
+「RIP」 (Routing Information Protocol)
+	・ディスタンスベクタ型のプロトコル
+	・RIP と RIPv2がある
+	・メトリックにはホップ数を採用（最大15)
+
+<RIPとRIPv2の違い>
+			RIP			RIPv2
+メッセージの送信	ブロードキャスト	マルチキャスト
+宛先NWのprefix		送信しない		送信する
+ClassLessRouting	非対応			対応
+サブネット分割		固定長			固定・可変長
+不連続サブネット	非対応			対応
+
+<設定>
+#ルーターコンフィグレーションモード
+ config)# router rip
+
+#バージョンの指定
+-router)# version 2
+
+#流すネットワークの指定
+-router)# network 172.16.0.0
+-router)# network 10.0.0.0
+
+#経路集約の無効
+-router)# no auto-summary
+
+#ACLを用いた特定IFでのホップ数の加算
+ config)# access-list 1 permit 192.168.0.1 0.0.0.255
+-router)# offset-list 1 out 3 GigabitEthernet0/1

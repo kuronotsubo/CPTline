@@ -1,0 +1,19 @@
+「VLAN」(Virtual LAN)
+　・業界標準でIEEE802.1qがある。CISCO独自だとISL
+　・アクセスポートとトランクポート
+　・タグVLANを使ってトランクリンク上でも判断できるようになる。
+
+<設定>
+#Vlan 10　を作成
+config)# vlan 10
+
+#VLANに名前をつける
+ -vlan)# name Tokyo_sisya
+
+#L3スイッチでルーティング機能を実装する
+config)# ip routing
+
+#SVI(Switch Virtual Interface)を作成し、IPアドレスを振り分ける。
+config)# interface vlan 10
+   -if)# ip add 172.16.10.254 255.255.255.0
+   -if)# no shut

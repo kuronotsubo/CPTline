@@ -1,0 +1,9 @@
+#名前解決の無効
+config)# no ip domain-lookup
+
+#コンソール設定
+config)# line con 0
+#ログがかぶるのを防ぐ
+ -line)# logging syncronous
+ -line)# exec-timeout 0 0
+

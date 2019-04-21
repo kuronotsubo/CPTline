@@ -1,0 +1,32 @@
+<IGP>（Interior Gateway Routing Protocol)
+　・RIP☆
+　・OSPF☆
+　・IGRP
+　・EIGRP
+　・IS-IS
+　・NLSP
+<EGP> (Exterior Gateway Routing Protocol)
+　・EGP
+　・BGP☆
+
+※AD値＝ルーティングプロトコルの信頼性　低い値のプロトコルを採用
+
+<ルーティングアルゴリズム>
+ ■ディスタンスベクター型
+	・Distance(距離)Vector(方向)
+	・距離と方向によって最適経路を決定
+	・ルータの負荷は低いが、収束に時間がかかる。
+	・RIP、IGRP
+
+ ■リンクステート型
+	・Link(接続)State(状態)
+	・ネットワークのマップを作製し、情報をもとに最適経路を決定。
+	・ルータの負荷は高いが、収束が早い
+	・OSPF、IS-IS
+
+ ■ハイブリッド型
+	・ディスタンスベクタとリンクステートを掛け合わせたアルゴリズム
+	・EIGRP
+	・CISCOが言い張っている
+
+※収束(Convergence) メトリック(Metric)
